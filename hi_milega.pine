@@ -1,0 +1,15 @@
+//@version=4
+study(title = "RSI Based Indicator", shorttitle = "HMS", overlay = false)
+
+len = input(9, minval=1, title="Length")
+src = input(close, "Source", type = input.source)
+up = rma(max(change(src), 0), len)
+down = rma(-min(change(src), 0), len)
+rsi_o = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))
+plot(rsi_o, "RSI", color=#8E1599)
+band1 = hline(50, "Upper Band", color=#C0C0C0)
+band0 = hline(50, "Lower Band", color=#C0C0C0)
+fill(band1, band0, color=#9915FF, transp=90, title="Background")
+
+plot(ema(rsi_o,3), title = 'EMA', color = color.green, linewidth = 2)
+plot(wma(rsi_o,21), title = 'WMA', color = color.red, linewidth = 2)
